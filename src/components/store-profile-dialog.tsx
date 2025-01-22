@@ -58,6 +58,7 @@ export function StoreProfileDialog() {
         description,
         name: name ?? "",
       });
+
       return { previousProfile: cached };
     },
     onSuccess() {

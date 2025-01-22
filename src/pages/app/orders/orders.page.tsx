@@ -1,20 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowRight, Search, X } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { OrderTableRow } from "./components/order-table-row.comp";
 import { OrderTableFilters } from "./components/order-table-filters.comp";
 import { Pagination } from "@/components/pagination.comp";
+import { useQuery } from "@tanstack/react-query";
+import { getOrders } from "@/api/get-orders";
 
 export const OrdersPage = () => {
+  const { data: result } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getOrders,
+  });
+
+  console.log(result);
+
   return (
     <>
       <Helmet title="Pedidos" />
@@ -38,9 +43,10 @@ export const OrdersPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <OrderTableRow key={i} />
-                ))}
+                {result &&
+                  result.orders.map((order) => (
+                    <OrderTableRow key={order.orderId} order={order} />
+                  ))}
               </TableBody>
             </Table>
           </div>

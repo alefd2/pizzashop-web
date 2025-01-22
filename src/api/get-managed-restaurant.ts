@@ -9,6 +9,6 @@ export interface GetManagedRestaurantResponse {
   managerId: string | null;
 }
 
-export const getManaged = async () => {
+export const getManagedRestaurant = async () => {
   return await api.get<GetManagedRestaurantResponse>("/managed-restaurant");
 };

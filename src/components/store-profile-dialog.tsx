@@ -83,14 +83,10 @@ export function StoreProfileDialog() {
     ]);
 
     if (cached) {
-      queryClient.setQueryData<GetManagedRestaurantResponse>(
-        ["managed-restaurant"],
-        {
-          ...cached,
-          name,
-          description,
-        },
-      );
+      queryClient.setQueryData(["managed-restaurant"], {
+        name,
+        description,
+      });
     }
 
     return { cached };

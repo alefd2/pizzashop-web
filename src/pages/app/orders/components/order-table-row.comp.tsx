@@ -92,11 +92,9 @@ export const OrderTableRow = ({ order }: OrderTableRowProps) => {
           <OrderDetails isOpen={isDetailsOpen} orderId={order.orderId} />
         </Dialog>
       </TableCell>
-
       <TableCell className="font-mono text-sm font-medium">
         {order.orderId}
       </TableCell>
-
       <TableCell className="text-muted-foreground">
         {formatDistanceToNow(order.createdAt, {
           locale: ptBR,

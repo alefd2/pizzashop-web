@@ -7,6 +7,12 @@ import { OrderStatus } from "@/components/order-status";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cancelOrder } from "@/api/cancel-order";
+import { GetOrdersResponse } from "@/api/get-orders";
+import { approveOrder } from "@/api/approve-order";
+import { dispatchOrder } from "@/api/dispatch-order";
+import { deliverOrder } from "@/api/deviler-order";
 
 interface OrderTableRowProps {
   order: {
@@ -19,6 +25,60 @@ interface OrderTableRowProps {
 }
 export const OrderTableRow = ({ order }: OrderTableRowProps) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const updateOrderStatusOnCache = (orderId: string, status: OrderStatus) => {
+    const ordersListCached = queryClient.getQueriesData<GetOrdersResponse>({
+      queryKey: ["orders"],
+    });
+
+    ordersListCached.forEach(([cacheKey, cacheData]) => {
+      if (!cacheData) return;
+
+      queryClient.setQueryData<GetOrdersResponse>(cacheKey, {
+        ...cacheData,
+        orders: cacheData.orders.map((order) => {
+          if (order.orderId === orderId) {
+            return {
+              ...order,
+              status: status,
+            };
+          }
+          return order;
+        }),
+      });
+    });
+  };
+
+  const { mutateAsync: cancelOrderFn, isPending: isCanceling } = useMutation({
+    mutationFn: cancelOrder,
+    onSuccess: async (_, { orderId }) => {
+      updateOrderStatusOnCache(orderId, "canceled");
+    },
+  });
+
+  const { mutateAsync: approvPrderFn, isPending: isApproving } = useMutation({
+    mutationFn: approveOrder,
+    onSuccess: async (_, { orderId }) => {
+      updateOrderStatusOnCache(orderId, "processing");
+    },
+  });
+
+  const { mutateAsync: dispatchOrderFn, isPending: isDispatching } =
+    useMutation({
+      mutationFn: dispatchOrder,
+      onSuccess: async (_, { orderId }) => {
+        updateOrderStatusOnCache(orderId, "delivering");
+      },
+    });
+
+  const { mutateAsync: deliverOrderFn, isPending: isDelivering } = useMutation({
+    mutationFn: deliverOrder,
+    onSuccess: async (_, { orderId }) => {
+      updateOrderStatusOnCache(orderId, "delivered");
+    },
+  });
+
   return (
     <TableRow>
       <TableCell>
@@ -54,13 +114,50 @@ export const OrderTableRow = ({ order }: OrderTableRowProps) => {
         })}
       </TableCell>
       <TableCell>
-        <Button variant="outline" size="xs">
-          <ArrowRight className="h-3 w-3" />
-          Aprovar
-        </Button>
+        {order.status == "pending" && (
+          <Button
+            onClick={() => approvPrderFn({ orderId: order.orderId })}
+            disabled={isApproving}
+            variant="outline"
+            size="xs"
+          >
+            <ArrowRight className="h-3 w-3" />
+            Aprovar
+          </Button>
+        )}
+        {order.status == "processing" && (
+          <Button
+            onClick={() => dispatchOrderFn({ orderId: order.orderId })}
+            disabled={isDispatching}
+            variant="outline"
+            size="xs"
+          >
+            <ArrowRight className="h-3 w-3" />
+            Em entrega
+          </Button>
+        )}
+
+        {order.status == "delivering" && (
+          <Button
+            onClick={() => deliverOrderFn({ orderId: order.orderId })}
+            disabled={isDelivering}
+            variant="outline"
+            size="xs"
+          >
+            <ArrowRight className="h-3 w-3" />
+            Entregue
+          </Button>
+        )}
       </TableCell>
       <TableCell>
-        <Button variant="ghost" size="xs">
+        <Button
+          onClick={() => cancelOrderFn({ orderId: order.orderId })}
+          disabled={
+            !["pending", "processing"].includes(order.status) || isCanceling
+          }
+          variant="ghost"
+          size="xs"
+        >
           <X className="h-3 w-3" />
           Cancelar
         </Button>

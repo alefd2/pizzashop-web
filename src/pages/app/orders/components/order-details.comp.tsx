@@ -1,5 +1,5 @@
 import { getOrdersDetails } from "@/api/get-order-datails";
-import { OrderStatus } from "@/components/order-status";
+import { OrderStatus } from "@/components/orders/order-status";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

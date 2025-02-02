@@ -13,9 +13,9 @@ import { getProfile } from "@/api/get-profile";
 import { getManagedRestaurant } from "@/api/get-managed-restaurant";
 import { Skeleton } from "./ui/skeleton";
 import { Dialog, DialogTrigger } from "./ui/dialog";
-import { StoreProfileDialog } from "./store-profile-dialog";
 import { signOut } from "@/api/sign-out";
 import { replace, useNavigate } from "react-router";
+import { StoreProfileDialog } from "./dialogs/store-profile-dialog";
 
 export const AccountMenu = () => {
   const navigate = useNavigate();

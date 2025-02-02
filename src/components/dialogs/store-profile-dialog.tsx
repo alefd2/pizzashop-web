@@ -10,7 +10,7 @@ import {
 } from "@/api/get-managed-restaurant";
 import { updateProfile } from "@/api/update-profile";
 
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DialogClose,
   DialogContent,
@@ -18,10 +18,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 const storeProfileSchema = z.object({
   name: z.string().min(1),

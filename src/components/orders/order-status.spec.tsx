@@ -1,5 +1,4 @@
-import { expect, it } from "vitest";
-import { describe } from "vitest";
+import { expect, it, describe } from "vitest";
 import { render } from "@testing-library/react";
 import { OrderStatus } from "./order-status";
 

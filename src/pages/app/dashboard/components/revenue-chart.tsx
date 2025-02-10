@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Label } from "@/components/ui/label";
-import { getDailyRevenueInPeriod } from "@/api/get-daily-revanue-in-period";
+import { getDailyRevenueInPeriod } from "@/api/get-daily-revenue-in-period";
 
 export function RevenueChart() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>({

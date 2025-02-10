@@ -1,9 +1,9 @@
-import { api } from "@/lib/axios";
+import { api } from '@/lib/axios'
 
-export interface SignInFormData {
-  email: string;
+export interface SignInBody {
+  email: string
 }
 
-export const signIn = async ({ email }: SignInFormData) => {
-  await api.post("/authenticate", { email });
-};
+export const signIn = async ({ email }: SignInBody) => {
+  await api.post('/authenticate', { email })
+}

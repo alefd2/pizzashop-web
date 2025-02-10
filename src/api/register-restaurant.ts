@@ -1,10 +1,10 @@
-import { api } from "@/lib/axios";
+import { api } from '@/lib/axios'
 
-export interface RegisterRestaltantBody {
-  restaurantName: string;
-  managerName: string;
-  email: string;
-  phone: string;
+export interface RegisterRestaurantBody {
+  restaurantName: string
+  managerName: string
+  email: string
+  phone: string
 }
 
 export const registerRestaurant = async ({
@@ -12,6 +12,6 @@ export const registerRestaurant = async ({
   managerName,
   phone,
   restaurantName,
-}: RegisterRestaltantBody) => {
-  await api.post("/restaurants", { email, managerName, phone, restaurantName });
-};
+}: RegisterRestaurantBody) => {
+  await api.post('/restaurants', { email, managerName, phone, restaurantName })
+}

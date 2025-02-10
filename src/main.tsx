@@ -1,9 +1,13 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { App } from "./app.tsx";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+import { enabledMSW } from './api/mocks/index.ts'
+import { App } from './app.tsx'
+
+enabledMSW().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+})

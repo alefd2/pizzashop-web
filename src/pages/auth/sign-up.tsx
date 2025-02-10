@@ -1,56 +1,54 @@
-import { registerRestaurant } from "@/api/register-restaurant";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useMutation } from "@tanstack/react-query";
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate, useSearchParams } from "react-router";
-import { toast } from "sonner";
-import { z } from "zod";
+import { useMutation } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router'
+import { toast } from 'sonner'
+import { z } from 'zod'
+
+import { registerRestaurant } from '@/api/register-restaurant'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export const SignUp = () => {
-  const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignUpFormData>();
-
-  const { mutateAsync: registerRestaurantFn } = useMutation({
-    mutationFn: registerRestaurant,
-  });
-
-  type SignUpFormData = z.infer<typeof signUpFormSchema>;
-
   const signUpFormSchema = z.object({
     restaurantName: z.string(),
     managerName: z.string(),
     phone: z.string(),
     email: z.string().email(),
-  });
+  })
+
+  type SignUpFormData = z.infer<typeof signUpFormSchema>
+  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignUpFormData>()
+
+  const { mutateAsync: registerRestaurantFn } = useMutation({
+    mutationFn: registerRestaurant,
+  })
 
   const handleSignUp = async (data: SignUpFormData) => {
-    console.log(data);
-
     try {
       await registerRestaurantFn({
         email: data.email,
         managerName: data.managerName,
         phone: data.phone,
         restaurantName: data.restaurantName,
-      });
+      })
 
-      toast.success("Restaurante cadastrado com sucesso!", {
+      toast.success('Restaurante cadastrado com sucesso!', {
         action: {
-          label: "Login",
-          onClick: () => navigate("/sign-in?email=" + data.email),
+          label: 'Login',
+          onClick: () => navigate('/sign-in?email=' + data.email),
         },
-      });
+      })
     } catch (error) {
-      toast.error("Erro ao cadastrar.");
+      toast.error('Erro ao cadastrar.')
     }
-  };
+  }
 
   return (
     <>
@@ -58,7 +56,7 @@ export const SignUp = () => {
 
       <div>
         <div className="p-8">
-          <Button variant={"ghost"} asChild className="absolute right-8 top-8">
+          <Button variant={'ghost'} asChild className="absolute right-8 top-8">
             <Link to="/sign-in">Fazer login</Link>
           </Button>
           <div className="flex w-[350px] flex-col justify-center gap-6">
@@ -75,7 +73,7 @@ export const SignUp = () => {
               <div className="space-y-2">
                 <Label htmlFor="restaurantName">Nome estabelecimento</Label>
                 <Input
-                  {...register("restaurantName")}
+                  {...register('restaurantName')}
                   required
                   id="restaurantName"
                   placeholder="Nome do restaureante"
@@ -84,7 +82,7 @@ export const SignUp = () => {
               <div className="space-y-2">
                 <Label htmlFor="managerName">Seu nome</Label>
                 <Input
-                  {...register("managerName")}
+                  {...register('managerName')}
                   required
                   id="managerName"
                   placeholder="nome"
@@ -93,7 +91,7 @@ export const SignUp = () => {
               <div className="space-y-2">
                 <Label htmlFor="email">Seu email</Label>
                 <Input
-                  {...register("email")}
+                  {...register('email')}
                   required
                   id="email"
                   type="email"
@@ -103,7 +101,7 @@ export const SignUp = () => {
               <div className="space-y-2">
                 <Label htmlFor="phone">Seu celular</Label>
                 <Input
-                  {...register("phone")}
+                  {...register('phone')}
                   required
                   id="phone"
                   type="tel"
@@ -112,8 +110,8 @@ export const SignUp = () => {
               </div>
 
               <p className="px-6 text-center text-sm text-muted-foreground">
-                Ao continuar, você concorda com os{" "}
-                <a className="underline underline-offset-4">termos de uso</a> e{" "}
+                Ao continuar, você concorda com os{' '}
+                <a className="underline underline-offset-4">termos de uso</a> e{' '}
                 <a className="underline underline-offset-4">
                   privacidade da nossa plataforma.
                 </a>
@@ -126,5 +124,5 @@ export const SignUp = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
